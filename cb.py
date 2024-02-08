@@ -42,8 +42,8 @@ def developer_matrix_build():
           for row in self.matrix:
               print(' '.join(row))
 
-  rows = 3
-  cols = 3
+  rows = 8
+  cols = 8
 
   alphanumeric_matrix = AlphanumericMatrix(rows, cols)
   # print("Matriks: ")
@@ -62,35 +62,57 @@ def developer_sequences_build():
 
 
 def array_possible_routes(matrix, buffer_size):
+
   # return possible of routes, first element of route must be in the first row of the matrix, second element must be second row (below the first element), and the maximum length of the route is buffer_size, the route must be alternately horizontal and vertical
   def is_valid_position(row, col):
       return 0 <= row < len(matrix) and 0 <= col < len(matrix[0])
 
   def is_valid_move(row, col, prev_row, prev_col):
-      return abs(row - prev_row) + abs(col - prev_col) == 1 and (row != prev_row or col != prev_col) and (abs(row - col) < 2)
+      return abs(row - prev_row) + abs(col - prev_col) == 1 and (row != prev_row or col != prev_col)
+  
+  def find_routes(row, col, path, routes, first_move, vertical, horizontal, forbidden_place):
+    if len(path) >= buffer_size:
+      return
+    path.append((row, col))
+    if col == 5 and row == 0:
+      print("ini dia")
+    routes.append(path[:])
 
-  def find_routes(row, col, path, routes):
-      if len(path) > buffer_size:
-          return
-      path.append((row, col))
-      routes.append(path[:])
 
-      for dr, dc in ((0, 1), (1, 0), (0, -1), (-1, 0)):
-          next_row, next_col = row + dr, col + dc
-          if is_valid_position(next_row, next_col) and is_valid_move(next_row, next_col, row, col):
-              find_routes(next_row, next_col, path, routes)
+    
+    for dr, dc in ((0, 1), (1, 0), (0, -1), (-1, 0)):
 
-      path.pop()
+      if first_move:
+        next_row, next_col = row + 1, col 
+      else:
+        next_row, next_col = row + dr, col + dc
+        if col == 5 and row == 0:
+          print(dr, dc)
+        if dr == 1 or dr == -1:
+          horizontal+=1
+        else:
+          vertical+=1
+      if is_valid_position(next_row, next_col) and is_valid_move(next_row, next_col, row, col) and horizontal < 2 and vertical < 2:
+          if (next_row, next_col) not in forbidden_place:
+            forbidden_place.append((next_row, next_col))
+            find_routes(next_row, next_col, path, routes, False, vertical, horizontal, forbidden_place)
+
+    forbidden_place = []
+
+    print("ini before", path)
+    path = []
+    print("ini after", path)
+    
 
   routes = []
   for col in range(len(matrix[0])):
-      find_routes(0, col, [], routes)
+    find_routes(0, col, [], routes, False, 0, 0, [])
   return routes
   
 
 
 if __name__ == "__main__":
-  buffer_size = 7
+  buffer_size = 10
   print(developer_matrix_build())
   matrix = developer_matrix_build()
   developer_sequences_build()
