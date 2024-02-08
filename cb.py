@@ -46,7 +46,7 @@ def developer_matrix_build():
   rows = 3
   cols = 2
 
-  matrix = [['U9', '79'], ['79','U9'], ['G7','66']]
+  matrix = [['U9', '79'], ['79','M5'], ['G7','66']]
 
   # alphanumeric_matrix = AlphanumericMatrix(rows, cols)
 
@@ -99,16 +99,33 @@ def count_point(all_path, sequences, sequences_rewards):
 
     # Iterasi melalui setiap jalur dan setiap urutan
     for i, path in enumerate(all_path):
+        # Inisialisasi array used_index untuk menyimpan indeks sequences yang sudah digunakan
+        used_index = []
         for j in range(len(path) - 1):
             for k in range(j + 1, len(path)):
                 sequence = path[j:k + 1]
                 if sequence in sequences:
-                    # Jika urutan ada dalam sequences, tambahkan nilai dari sequences_rewards
-                    path_reward[i] += sequences_rewards[sequences.index(sequence)]
+                    # Dapatkan indeks dari sequence dalam sequences
+                    index = sequences.index(sequence)
+                    # Jika indeks belum ada dalam used_index, tambahkan nilai dari sequences_rewards
+                    if index not in used_index:
+                        path_reward[i] += sequences_rewards[index]
+                        # Tambahkan indeks ke used_index
+                        used_index.append(index)
 
     return path_reward
 
+def path_biggest_point(path_reward, all_path):
+  biggest = max(path_reward)
+  index = path_reward.index(biggest)
+  path = all_path[index]
+
+  return path, biggest
+
 if __name__ == "__main__":
+
+  #manual input
+
   # buffer_size = 10
   # matrix_width, matrix_height, matrix = matrix_build()
   # patterns = generate_patterns(matrix_height, matrix_width, buffer_size)
@@ -119,6 +136,7 @@ if __name__ == "__main__":
   # path_reward = count_point(all_path, sequences, sequences_rewards)
   # print(path_reward)
 
+  # developer auto input
   buffer_size = 10
   matrix_width, matrix_height, matrix = developer_matrix_build()
   patterns = generate_patterns(matrix_height, matrix_width, buffer_size)
@@ -128,3 +146,9 @@ if __name__ == "__main__":
   print(all_path)
   path_reward = count_point(all_path, sequences, sequences_rewards)
   print(path_reward)
+  path, biggest = path_biggest_point(path_reward, all_path)
+  print("biggest score = ", biggest)
+  print(path)
+  
+
+  
