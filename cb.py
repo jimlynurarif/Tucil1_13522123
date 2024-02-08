@@ -29,34 +29,34 @@ def sequences_build():
 
 
 def developer_matrix_build():
-  class AlphanumericMatrix:
-      def __init__(self, rows, cols):
-          self.rows = rows
-          self.cols = cols
-          self.matrix = [[self.generate_random_alphanumeric() for _ in range(cols)] for _ in range(rows)]
+  # class AlphanumericMatrix:
+  #     def __init__(self, rows, cols):
+  #         self.rows = rows
+  #         self.cols = cols
+  #         self.matrix = [[self.generate_random_alphanumeric() for _ in range(cols)] for _ in range(rows)]
 
-      def generate_random_alphanumeric(self):
-          alphanumeric_chars = string.digits + string.ascii_uppercase
-          return ''.join(random.choice(alphanumeric_chars) for _ in range(2))
+  #     def generate_random_alphanumeric(self):
+  #         alphanumeric_chars = string.digits + string.ascii_uppercase
+  #         return ''.join(random.choice(alphanumeric_chars) for _ in range(2))
 
-      def display_matrix(self):
-          for row in self.matrix:
-              print(' '.join(row))
+  #     def display_matrix(self):
+  #         for row in self.matrix:
+  #             print(' '.join(row))
 
-  rows = 8
-  cols = 8
+  rows = 3
+  cols = 2
 
-  alphanumeric_matrix = AlphanumericMatrix(rows, cols)
-  # print("Matriks: ")
-  # alphanumeric_matrix.display_matrix()
-  # print(alphanumeric_matrix.matrix)
-  return alphanumeric_matrix.matrix
+  matrix = [['U9', '79'], ['79','U9'], ['G7','66']]
+
+  # alphanumeric_matrix = AlphanumericMatrix(rows, cols)
+
+  return cols, rows, matrix
 
 def developer_sequences_build():
   sequences = [
-      ['U9', '79', 'A8'],
-      ['M5', 'U7', 'F9'],
-      ['G7', 'H6', '2I']
+      ['U9', '79'],
+      ['M5', '66', 'G7'],
+      ['G7', 'H6']
   ]
   sequences_rewards = [10, 20, 30]
   return sequences, sequences_rewards
@@ -84,20 +84,47 @@ def generate_patterns(n, m, max_len):
     return patterns
 
 def extract_elements(matrix, coordinates):
-    result = []
-    for coord_list in coordinates:
-        temp_result = []
-        for coord in coord_list:
-            row, col = coord
-            temp_result.append(matrix[row][col])
-        result.append(temp_result)
-    return result
+  result = []
+  for coord_list in coordinates:
+      temp_result = []
+      for coord in coord_list:
+          row, col = coord
+          temp_result.append(matrix[row][col])
+      result.append(temp_result)
+  return result
+
+def count_point(all_path, sequences, sequences_rewards):
+    # Inisialisasi array path_reward dengan nilai nol
+    path_reward = [0] * len(all_path)
+
+    # Iterasi melalui setiap jalur dan setiap urutan
+    for i, path in enumerate(all_path):
+        for j in range(len(path) - 1):
+            for k in range(j + 1, len(path)):
+                sequence = path[j:k + 1]
+                if sequence in sequences:
+                    # Jika urutan ada dalam sequences, tambahkan nilai dari sequences_rewards
+                    path_reward[i] += sequences_rewards[sequences.index(sequence)]
+
+    return path_reward
 
 if __name__ == "__main__":
+  # buffer_size = 10
+  # matrix_width, matrix_height, matrix = matrix_build()
+  # patterns = generate_patterns(matrix_height, matrix_width, buffer_size)
+  # sequences, sequences_rewards = developer_sequences_build()
+  # print("A")
+  # all_path = extract_elements(matrix, patterns)
+  # print(all_path)
+  # path_reward = count_point(all_path, sequences, sequences_rewards)
+  # print(path_reward)
+
   buffer_size = 10
-  matrix_width, matrix_height, matrix = matrix_build()
+  matrix_width, matrix_height, matrix = developer_matrix_build()
   patterns = generate_patterns(matrix_height, matrix_width, buffer_size)
-  developer_sequences_build()
+  sequences, sequences_rewards = developer_sequences_build()
   print("A")
-  result_list = extract_elements(matrix, patterns)
-  print(result_list)
+  all_path = extract_elements(matrix, patterns)
+  print(all_path)
+  path_reward = count_point(all_path, sequences, sequences_rewards)
+  print(path_reward)
