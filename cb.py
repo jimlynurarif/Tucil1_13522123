@@ -14,6 +14,7 @@ def matrix_build():
           print("Ulangi input baris terkini: ")
           row = input().strip().split()
       matrix.append(row)
+  return matrix_width, matrix_height, matrix
 
 def sequences_build():
   number_of_sequences = int(input("Enter the number of sequences: "))
@@ -61,60 +62,42 @@ def developer_sequences_build():
   return sequences, sequences_rewards
 
 
-def array_possible_routes(matrix, buffer_size):
+def generate_patterns(n, m, max_len):
+    directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]  # Right, left, down, up directions
+    patterns = []
 
-  # return possible of routes, first element of route must be in the first row of the matrix, second element must be second row (below the first element), and the maximum length of the route is buffer_size, the route must be alternately horizontal and vertical
-  def is_valid_position(row, col):
-      return 0 <= row < len(matrix) and 0 <= col < len(matrix[0])
+    def dfs(x, y, path, direction_index):
+        if len(path) > max_len:
+            return
+        patterns.append(path[:])
+        for i in range(2):
+            dx, dy = directions[direction_index + i]
+            nx, ny = x + dx, y + dy 
+            if 0 <= nx < n and 0 <= ny < m and (nx, ny) not in path:
+                path.append((nx, ny))
+                dfs(nx, ny, path, (direction_index + 2) % 4)  # Alternate between vertical and horizontal
+                path.pop()
 
-  def is_valid_move(row, col, prev_row, prev_col):
-      return abs(row - prev_row) + abs(col - prev_col) == 1 and (row != prev_row or col != prev_col)
-  
-  def find_routes(row, col, path, routes, first_move, vertical, horizontal, forbidden_place):
-    if len(path) >= buffer_size:
-      return
-    path.append((row, col))
-    if col == 5 and row == 0:
-      print("ini dia")
-    routes.append(path[:])
+    for i in range(m):
+        dfs(0, i, [(0, i)], 2)  # Start with downward movement, 2 is the index of downward movement, see directions array
 
+    return patterns
 
-    
-    for dr, dc in ((0, 1), (1, 0), (0, -1), (-1, 0)):
-
-      if first_move:
-        next_row, next_col = row + 1, col 
-      else:
-        next_row, next_col = row + dr, col + dc
-        if col == 5 and row == 0:
-          print(dr, dc)
-        if dr == 1 or dr == -1:
-          horizontal+=1
-        else:
-          vertical+=1
-      if is_valid_position(next_row, next_col) and is_valid_move(next_row, next_col, row, col) and horizontal < 2 and vertical < 2:
-          if (next_row, next_col) not in forbidden_place:
-            forbidden_place.append((next_row, next_col))
-            find_routes(next_row, next_col, path, routes, False, vertical, horizontal, forbidden_place)
-
-    forbidden_place = []
-
-    print("ini before", path)
-    path = []
-    print("ini after", path)
-    
-
-  routes = []
-  for col in range(len(matrix[0])):
-    find_routes(0, col, [], routes, False, 0, 0, [])
-  return routes
-  
-
+def extract_elements(matrix, coordinates):
+    result = []
+    for coord_list in coordinates:
+        temp_result = []
+        for coord in coord_list:
+            row, col = coord
+            temp_result.append(matrix[row][col])
+        result.append(temp_result)
+    return result
 
 if __name__ == "__main__":
   buffer_size = 10
-  print(developer_matrix_build())
-  matrix = developer_matrix_build()
+  matrix_width, matrix_height, matrix = matrix_build()
+  patterns = generate_patterns(matrix_height, matrix_width, buffer_size)
   developer_sequences_build()
   print("A")
-  print(array_possible_routes(matrix, buffer_size))
+  result_list = extract_elements(matrix, patterns)
+  print(result_list)
