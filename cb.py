@@ -26,41 +26,30 @@ def generate_patterns(n, m, max_len, buffer_size):
     return patterns
 
 def deletePath(patterns):
-  for i in range(len(patterns)):
-    coordinates = patterns[i]
-    j = 1
-    while j < len(coordinates) - 1:
-        if coordinates[j][1] == coordinates[j - 1][1] and coordinates[j][1] == coordinates[j + 1][1]:
-            del coordinates[j]
-        elif coordinates[j][0] == coordinates[j - 1][0] and coordinates[j][0] == coordinates[j + 1][0]:
-            del coordinates[j]
-        else:
-            j += 1
-  return patterns
-
-# patterns = generate_patterns(10,10,13) #contoh patterns [[(0, 0)], [(0, 0), (0, 1)], [(0, 0), (0, 1), (0, 2)]]
-# deletePath(patterns)
-# print(patterns)
-
-# masukan ke file
-# with open("adam.txt", "w") as file:
-#   for pattern in patterns:
-#     file.write(str(pattern) + "\n")
+    for i in range(len(patterns)):
+        coordinates = patterns[i]
+        j = 1
+        while j < len(coordinates) - 1:
+            if coordinates[j][1] == coordinates[j - 1][1] and coordinates[j][1] == coordinates[j + 1][1]:
+                del coordinates[j]
+            elif coordinates[j][0] == coordinates[j - 1][0] and coordinates[j][0] == coordinates[j + 1][0]:
+                del coordinates[j]
+            else:
+                j += 1
+    return patterns
 
 def developer_sequences_build():
-  sequences = [
-      ['BD', 'E9', '1C'],
-      ['BD', '7A', 'BD'],
-      ['BD', '1C', 'BD', '55']
-  ]
-  sequences_rewards = [10, 20, 30]
-  return sequences, sequences_rewards
+    sequences = [
+        ['BD', 'E9', '1C'],
+        ['BD', '7A', 'BD'],
+        ['BD', '1C', 'BD', '55']
+    ]
+    sequences_rewards = [10, 20, 30]
+    return sequences, sequences_rewards
 
 def count_point(all_path, sequences, sequences_rewards):
-    # Inisialisasi array path_reward dengan nilai nol
     path_reward = [0] * len(all_path)
 
-    # Iterasi melalui setiap jalur dan setiap urutan
     for i, path in enumerate(all_path):
         used_index = []
         for j in range(len(path) - 1):
@@ -92,7 +81,6 @@ def sequences_build():
     sequences_rewards = []
     for i in range(number_of_sequences):
         sequence = input("Enter the sequence {}: ".format(i + 1)).strip().split()
-        # Pastikan sequence memiliki minimal dua elemen
         while len(sequence) < 2:
             print("Sequence harus terdiri dari minimal dua elemen. Coba lagi.")
             sequence = input("Enter the sequence {}: ".format(i + 1)).strip().split()
@@ -100,7 +88,6 @@ def sequences_build():
         sequences_reward = int(input("Enter the reward for sequence {}: ".format(i + 1)))
         sequences_rewards.append(sequences_reward)
     return sequences, sequences_rewards
-
 
 def extractPath(results, matrix):
     all_path = []
@@ -125,8 +112,6 @@ def matrix_build():
             row = input().strip().split()
         matrix.append(row)
     return matrix_width, matrix_height, matrix
-
-import random
 
 def generate_random_sequences(token):
     sequences = []
@@ -164,9 +149,6 @@ def main():
         patterns = generate_patterns(matrix_height, matrix_width, max_len, buffer_size)
         patterns = deletePath(patterns)
         results = extractPath(patterns, matrix)
-        # with open("adam.txt", "w") as file:
-        #     for result in results:
-        #         file.write(str([result]) + "\n")
         path_reward = count_point(results, sequences, sequences_rewards)
         path, biggest, path_biggest_index = path_biggest_point(path_reward, results)
         biggest_path_Windexes = patterns[path_biggest_index]
@@ -196,15 +178,6 @@ baris, kolom''')
                     file.write(f"{point[0]}, {point[1]}\n")
                 file.write("\n" + str(runtime) + " ms")
             print("Berhasil disimpan di result.txt")
-        # sequences, sequences_rewards = developer_sequences_build()
-        # path_reward = count_point(results, sequences, sequences_rewards)
-        # print(path_reward)
-        # path, biggest = path_biggest_point(path_reward, results)
-        # print("biggest score = ", biggest)
-        # print(path)
-        # end_time = time.time()
-        # runtime = end_time - start_time
-        # print(runtime, "ms")
     elif method == "auto":
         jumlah_token_unik = int(input("Masukkan jumlah token unik: "))
         token = input("Masukkan token: ").split() # misal bentuknya kek gini ['E9', 'B7', '8M']
@@ -248,7 +221,6 @@ baris, kolom''')
         print("\n" + str(runtime) + " ms")
 
         is_save = input("Apakah ingin menyimpan hasil ke file? (y/n): ")
-        # simpan tanpa prompt
         if is_save == "y":
             with open("result.txt", "w") as file:
                 file.write(str(biggest) + "\n")
