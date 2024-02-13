@@ -2,30 +2,31 @@ import random
 import string
 
 def matrix_build():
-  matrix_width = int(input("Masukkan jumlah kolom: "))
-  matrix_height = int(input("Masukkan jumlah baris: "))
-  matrix = [[0 for i in range(matrix_width)] for j in range(matrix_height)]
-  matrix = []
-  print("Masukkan matriks (pisahkan elemen dengan spasi, baris baru untuk setiap baris):")
-  for _ in range(matrix_height): 
-      row = input().strip().split()
-      while len(row) != matrix_width:
-          print("Error: Jumlah elemen harus sama jumlah kolom!!!")
-          print("Ulangi input baris terkini: ")
-          row = input().strip().split()
-      matrix.append(row)
-  return matrix_width, matrix_height, matrix
+    matrix_dimensions = input("Masukkan jumlah baris dan kolom (pisahkan dengan spasi): ").split()
+    matrix_width = int(matrix_dimensions[0])
+    matrix_height = int(matrix_dimensions[1])
+    matrix = [[0 for i in range(matrix_width)] for j in range(matrix_height)]
+    matrix = []
+    print("Masukkan matriks (pisahkan elemen dengan spasi, baris baru untuk setiap baris):")
+    for _ in range(matrix_height): 
+        row = input().strip().split()
+        while len(row) != matrix_width:
+            print("Error: Jumlah elemen harus sama jumlah kolom!!!")
+            print("Ulangi input baris terkini: ")
+            row = input().strip().split()
+        matrix.append(row)
+    return matrix_width, matrix_height, matrix
 
 def sequences_build():
-  number_of_sequences = int(input("Enter the number of sequences: "))
-  sequences = []
-  sequences_rewards = []
-  for i in range(number_of_sequences):
-      sequence = input("Enter the sequence: ").strip().split()
-      sequences.append(sequence)
-      sequences_reward = int(input("Enter the reward for sequence {}: ".format(i + 1)))
-      sequences_rewards.append(sequences_reward)
-  return sequences, sequences_rewards
+    number_of_sequences = int(input("Enter the number of sequences: "))
+    sequences = []
+    sequences_rewards = []
+    for i in range(number_of_sequences):
+        sequence = input("Enter the sequence: ").strip().split()
+        sequences.append(sequence)
+        sequences_reward = int(input("Enter the reward for sequence {}: ".format(i + 1)))
+        sequences_rewards.append(sequences_reward)
+    return sequences, sequences_rewards
 
 
 def developer_matrix_build():
@@ -66,7 +67,7 @@ def generate_patterns(n, m, max_len):
     directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]  # Right, left, down, up directions
     patterns = []
 
-    def dfs(x, y, path, direction_index):
+    def search(x, y, path, direction_index):
         if len(path) > max_len:
             return
         patterns.append(path[:])
@@ -75,11 +76,11 @@ def generate_patterns(n, m, max_len):
             nx, ny = x + dx, y + dy 
             if 0 <= nx < n and 0 <= ny < m and (nx, ny) not in path:
                 path.append((nx, ny))
-                dfs(nx, ny, path, (direction_index + 2) % 4)  # Alternate between vertical and horizontal
+                search(nx, ny, path, (direction_index + 2) % 4)
                 path.pop()
 
     for i in range(m):
-        dfs(0, i, [(0, i)], 2)  # Start with downward movement, 2 is the index of downward movement, see directions array
+        search(0, i, [(0, i)], 2)
 
     return patterns
 
@@ -99,7 +100,6 @@ def count_point(all_path, sequences, sequences_rewards):
 
     # Iterasi melalui setiap jalur dan setiap urutan
     for i, path in enumerate(all_path):
-        # Inisialisasi array used_index untuk menyimpan indeks sequences yang sudah digunakan
         used_index = []
         for j in range(len(path) - 1):
             for k in range(j + 1, len(path)):
@@ -117,6 +117,8 @@ def count_point(all_path, sequences, sequences_rewards):
 
 def path_biggest_point(path_reward, all_path):
   biggest = max(path_reward)
+  if biggest == 0:
+    return "none","none"
   index = path_reward.index(biggest)
   path = all_path[index]
 
@@ -124,31 +126,44 @@ def path_biggest_point(path_reward, all_path):
 
 if __name__ == "__main__":
 
-  #manual input
+#manual input
 
-  # buffer_size = 10
-  # matrix_width, matrix_height, matrix = matrix_build()
-  # patterns = generate_patterns(matrix_height, matrix_width, buffer_size)
-  # sequences, sequences_rewards = developer_sequences_build()
-  # print("A")
-  # all_path = extract_elements(matrix, patterns)
-  # print(all_path)
-  # path_reward = count_point(all_path, sequences, sequences_rewards)
-  # print(path_reward)
+# buffer_size = 10
+# matrix_width, matrix_height, matrix = matrix_build()
+# patterns = generate_patterns(matrix_height, matrix_width, buffer_size)
+# sequences, sequences_rewards = developer_sequences_build()
+# print("A")
+# all_path = extract_elements(matrix, patterns)
+# print(all_path)
+# path_reward = count_point(all_path, sequences, sequences_rewards)
+# print(path_reward)
 
-  # developer auto input
-  buffer_size = 10
-  matrix_width, matrix_height, matrix = developer_matrix_build()
-  patterns = generate_patterns(matrix_height, matrix_width, buffer_size)
-  sequences, sequences_rewards = developer_sequences_build()
-  print("A")
-  all_path = extract_elements(matrix, patterns)
-  print(all_path)
-  path_reward = count_point(all_path, sequences, sequences_rewards)
-  print(path_reward)
-  path, biggest = path_biggest_point(path_reward, all_path)
-  print("biggest score = ", biggest)
-  print(path)
-  
+# developer auto input
+    buffer_size = 10
+    matrix_width, matrix_height, matrix = developer_matrix_build()
+    patterns = generate_patterns(matrix_height, matrix_width, buffer_size)
+    sequences, sequences_rewards = developer_sequences_build()
+    print("A")
+    all_path = extract_elements(matrix, patterns)
+    print(all_path)
+    path_reward = count_point(all_path, sequences, sequences_rewards)
+    print(path_reward)
+    path, biggest = path_biggest_point(path_reward, all_path)
+    print("biggest score = ", biggest)
+    print(path)
 
-  
+# final main
+    # manual = input("Do you want automatic matrix and sequance? (Y/N)")
+    # if manual == "Y":
+    #     buffer_size = int(input("buffer amount: "))
+    #     matrix_width, matrix_height, matrix = matrix_build()
+    #     sequences, sequences_rewards = sequences_build()
+    #     patterns = generate_patterns(matrix_height, matrix_width, buffer_size)
+    #     print("A")
+    #     all_path = extract_elements(matrix, patterns)
+    #     print(all_path)
+    #     path_reward = count_point(all_path, sequences, sequences_rewards)
+    #     print(path_reward)
+    #     path, biggest = path_biggest_point(path_reward, all_path)
+    #     print("biggest score = ", biggest)
+    #     print("biggest score path = ", path)
