@@ -21,7 +21,8 @@ def generate_patterns(n, m, max_len, buffer_size):
                     search(nx, ny, path, change_dir + 1, dx, dy)
                 path.pop()
 
-    search(0, 0, [(0, 0)], 1, 0, 0)
+    for i in range(m):
+        search(0, i, [(0, i)], 1, 0, 0)
 
     return patterns
 
@@ -225,7 +226,7 @@ def main():
                 is_save = input("Apakah ingin menyimpan hasil ke file? (y/n): ")
                 # simpan tanpa prompt
                 if is_save == "y":
-                    with open("result.txt", "w") as file:
+                    with open("../test/result.txt", "w") as file:
                         file.write(str(biggest) + "\n")
                         for i in range(len(path)):
                             file.write(str(path[i]) + " ")
@@ -275,7 +276,7 @@ def main():
 
                 is_save = input("Apakah ingin menyimpan hasil ke file? (y/n): ")
                 if is_save == "y":
-                    with open("result.txt", "w") as file:
+                    with open("../test/result.txt", "w") as file:
                         file.write(str(biggest) + "\n")
                         for i in range(len(path)):
                             file.write(str(path[i]) + " ")
