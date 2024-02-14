@@ -166,7 +166,31 @@ def main():
     file_name = "input.txt"
     try:
         with open(file_name, "r") as file:
-            method = file.readline().strip()
+        # Inisialisasi counter baris
+            counter = 0
+            
+            # Loop melalui setiap baris dalam file
+            for baris in file:
+                # Tambahkan 1 ke counter setiap kali loop
+                counter += 1
+                
+                # Jika counter adalah 2, ini adalah baris kedua
+                if counter == 2:
+                    # Split baris menjadi dua bagian
+                    angka = baris.split()
+
+                    # Pastikan terdapat dua angka
+                    if len(angka) == 2:
+                        # Periksa apakah keduanya bilangan angka
+                        if angka[0].isdigit() and angka[1].isdigit():
+                            method = "manual"
+                        else:
+                            method = "auto"
+                    else:
+                        method = "auto"
+                    break
+        with open(file_name, "r") as file:
+            # method = file.readline().strip()
             if method == "manual":
                 buffer_size = int(file.readline().strip())
                 matrix_width, matrix_height = map(int, file.readline().split())
@@ -184,10 +208,10 @@ def main():
                 patterns = generate_patterns(matrix_height, matrix_width, max_len, buffer_size)
                 patterns = deletePath(patterns)
                 results = extractPath(patterns, matrix)
+                end_time = time.time()
                 path_reward = count_point(results, sequences, sequences_rewards)
                 path, biggest, path_biggest_index = path_biggest_point(path_reward, results)
                 biggest_path_Windexes = patterns[path_biggest_index]
-                end_time = time.time()
                 runtime = round((end_time - start_time) * 1000)
                 print("biggest score = ", biggest)
                 # print(path)
@@ -233,11 +257,11 @@ def main():
                 patterns = generate_patterns(matrix_height, matrix_width, max_len, buffer_size)
                 patterns = deletePath(patterns)
                 results = extractPath(patterns, matrix)
+                end_time = time.time()
                 path_reward = count_point(results, sequences, sequences_rewards)
                 # print("path_reward:", path_reward)
                 path, biggest, path_biggest_index = path_biggest_point(path_reward, results)
                 biggest_path_Windexes = patterns[path_biggest_index]
-                end_time = time.time()
                 runtime = round((end_time - start_time) * 1000)
                 print("biggest score = ", biggest)
                 # print(path)
