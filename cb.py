@@ -169,7 +169,7 @@ def main():
             method = file.readline().strip()
             if method == "manual":
                 buffer_size = int(file.readline().strip())
-                matrix_height, matrix_width = map(int, file.readline().split())
+                matrix_width, matrix_height = map(int, file.readline().split())
                 matrix = [file.readline().split() for _ in range(matrix_height)]
                 max_len = matrix_width * matrix_height
                 sequences, sequences_rewards = [], []
@@ -218,7 +218,7 @@ def main():
                     print("Ulangi input baris terkini: ")
                     token = input().strip().split()
                 buffer_size = int(file.readline().strip())
-                matrix_height, matrix_width = map(int, file.readline().split())
+                matrix_width, matrix_height = map(int, file.readline().split())
                 print("loading... too big buffer_size can take a long time, please sabar \n")
                 max_len = matrix_width * matrix_height
                 jumlah_sekuens = int(file.readline().strip())
