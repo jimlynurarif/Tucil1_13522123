@@ -194,12 +194,9 @@ def main():
                 print("path: ", end="")
                 for i in range(len(path)):
                     print(path[i], end=" ")
-                print('''
-
-koordinat path
-baris, kolom''')
+                print("")
                 for point in biggest_path_Windexes:
-                    print(f"{point[0]}, {point[1]}")
+                    print(f"{point[1]+1}, {point[0]+1}")
                 print("\n" + str(runtime) + " ms")
                 is_save = input("Apakah ingin menyimpan hasil ke file? (y/n): ")
                 # simpan tanpa prompt
@@ -210,7 +207,7 @@ baris, kolom''')
                             file.write(str(path[i]) + " ")
                         file.write("\n")
                         for point in biggest_path_Windexes:
-                            file.write(f"{point[0]}, {point[1]}\n")
+                            file.write(f"{point[1]+1}, {point[0]+1}\n")
                         file.write("\n" + str(runtime) + " ms")
                     print("Berhasil disimpan di result.txt")
             elif method == "auto":
@@ -247,12 +244,9 @@ baris, kolom''')
                 print("path: ", end="")
                 for i in range(len(path)):
                     print(path[i], end=" ")
-                print('''
-
-koordinat path
-baris, kolom''')
+                print("")
                 for point in biggest_path_Windexes:
-                    print(f"{point[0]}, {point[1]}")
+                    print(f"{point[1]+1}, {point[0]+1}")
                 print("\n" + str(runtime) + " ms")
 
                 is_save = input("Apakah ingin menyimpan hasil ke file? (y/n): ")
@@ -263,7 +257,7 @@ baris, kolom''')
                             file.write(str(path[i]) + " ")
                         file.write("\n")
                         for point in biggest_path_Windexes:
-                            file.write(f"{point[0]}, {point[1]}\n")
+                            file.write(f"{point[1]+1}, {point[0]+1}\n")
                         file.write("\n" + str(runtime) + " ms")
                     print("Berhasil disimpan di result.txt")
             else:
